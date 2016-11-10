@@ -1,6 +1,6 @@
 {
   "name": "react-native-calendar-picker",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "Calendar Picker Component for React Native",
   "main": "./CalendarPicker/CalendarPicker.js",
   "scripts": {
@@ -24,6 +24,13 @@
     "name": "Stephani Alves",
     "email": "alves@stephanimoroni.com"
   },
+  "contributors": [
+    {
+      "name": "Piotr Poźniak",
+      "email": "piotr.pozniak@thebeaverhead.com",
+      "url": "http://thebeaverhead.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/stephy/CalendarPicker/issues"
