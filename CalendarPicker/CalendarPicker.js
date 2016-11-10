@@ -45,7 +45,8 @@ var Day = React.createClass({
     startFromMonday: React.PropTypes.bool,
     selectedDayColor: React.PropTypes.string,
     selectedDayTextColor: React.PropTypes.string,
-    textStyle: Text.propTypes.style
+    textStyle: Text.propTypes.style,
+    currentDay: React.PropTypes.bool
   },
   getDefaultProps () {
     return {
@@ -79,10 +80,13 @@ var Day = React.createClass({
         </View>
       );
     } else {
+
+      let currentDayStyle = this.props.currentDay ? styles.currentDay : textStyle;
+
       if (this.props.date < this.props.minDate || this.props.date > this.props.maxDate) {
         return (
           <View style={styles.dayWrapper}>
-            <Text style={[styles.dayLabel, textStyle, styles.disabledTextColor]}>
+            <Text style={[styles.dayLabel, textStyle, styles.disabledTextColor, currentDayStyle]}>
               {this.props.day}
             </Text>
           </View>
@@ -94,7 +98,7 @@ var Day = React.createClass({
             <TouchableOpacity
             style={styles.dayButton}
             onPress={() => this.props.onDayChange(this.props.day) }>
-              <Text style={[styles.dayLabel, textStyle]}>
+              <Text style={[styles.dayLabel, textStyle, currentDayStyle]}>
                 {this.props.day}
               </Text>
             </TouchableOpacity>
@@ -173,24 +177,31 @@ var Days = React.createClass({
       thisMonthFirstDay = this.props.startFromMonday ? new Date(year, month, 0) : new Date(year, month, 1),
       slotsAccumulator = 0;
 
+    var currentDate = new Date();
+    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()-1);
+
     for (i = 0; i < MAX_ROWS; i++ ) { // Week rows
       columns = [];
 
       for (j = 0; j < MAX_COLUMNS; j++) { // Day columns
         if (slotsAccumulator >= thisMonthFirstDay.getDay()) {
           if (currentDay < getDaysInMonth(month, year)) {
+
+            let date = new Date(year, month, currentDay + 1);
+
             columns.push(<Day
                       key={j}
                       day={currentDay+1}
                       selected={this.state.selectedStates[currentDay]}
-                      date={new Date(year, month, currentDay + 1)}
+                      date={date}
                       maxDate={this.props.maxDate}
                       minDate={this.props.minDate}
                       onDayChange={this.onPressDay}
                       screenWidth={this.props.screenWidth}
                       selectedDayColor={this.props.selectedDayColor}
                       selectedDayTextColor={this.props.selectedDayTextColor}
-                      textStyle={this.props.textStyle} />);
+                      textStyle={this.props.textStyle}
+                      currentDay={date.getTime() == currentDate.getTime()}/>);
             currentDay++;
           }
         } else {
@@ -237,6 +248,7 @@ var HeaderControls = React.createClass({
   propTypes: {
     month: React.PropTypes.number.isRequired,
     year: React.PropTypes.number,
+    day: React.PropTypes.number,
     getNextYear: React.PropTypes.func.isRequired,
     getPrevYear: React.PropTypes.func.isRequired,
     onMonthChange: React.PropTypes.func.isRequired,
@@ -346,14 +358,16 @@ var HeaderControls = React.createClass({
       );
     }
 
+    console.log(styles.headerWrapper);
+
     return (
       <View style={styles.headerWrapper}>
         <View style={styles.monthSelector}>
           {previous}
         </View>
-        <View>
+        <View style={styles.monthLabelWrapper}>
           <Text style={[styles.monthLabel, textStyle]}>
-            { (this.props.months || MONTHS)[this.state.selectedMonth] } { this.props.year }
+            { (this.props.months || MONTHS)[this.state.selectedMonth] } {this.props.day}, { this.props.year }
           </Text>
         </View>
         <View style={styles.monthSelector}>
@@ -375,12 +389,19 @@ var CalendarPicker = React.createClass({
     startFromMonday: React.PropTypes.bool,
     weekdays: React.PropTypes.array,
     months: React.PropTypes.array,
-    previousTitle: React.PropTypes.string,
-    nextTitle: React.PropTypes.string,
+    previousTitle: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.string
+    ]),
+    nextTitle: React.PropTypes.oneOfType([
+      React.PropTypes.object,
+      React.PropTypes.string
+    ]),
     selectedDayColor: React.PropTypes.string,
     selectedDayTextColor: React.PropTypes.string,
     scaleFactor: React.PropTypes.number,
-    textStyle: Text.propTypes.style
+    textStyle: Text.propTypes.style,
+    makeStyle: React.PropTypes.func
   },
   getDefaultProps() {
     return {
@@ -389,7 +410,14 @@ var CalendarPicker = React.createClass({
   },
   getInitialState() {
     if (this.props.scaleFactor !== undefined) {
-      styles = StyleSheet.create(makeStyles(this.props.scaleFactor));
+      if (this.props.makeStyles != undefined) {
+        styles = StyleSheet.create(this.props.makeStyles(this.props.scaleFactor));
+      }
+      else {
+        styles = StyleSheet.create(makeStyles(this.props.scaleFactor));
+      }
+
+
     }
     return {
       date: this.props.selectedDate,
@@ -448,6 +476,7 @@ var CalendarPicker = React.createClass({
           minDate={this.props.minDate}
           year={this.state.year}
           month={this.state.month}
+          day={this.state.day}
           onMonthChange={this.onMonthChange}
           getNextYear={this.getNextYear}
           getPrevYear={this.getPrevYear}
