@@ -178,7 +178,7 @@ var Days = React.createClass({
       slotsAccumulator = 0;
 
     var currentDate = new Date();
-    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()-1);
+    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
 
     for (i = 0; i < MAX_ROWS; i++ ) { // Week rows
       columns = [];
@@ -357,8 +357,6 @@ var HeaderControls = React.createClass({
         </TouchableOpacity>
       );
     }
-
-    console.log(styles.headerWrapper);
 
     return (
       <View style={styles.headerWrapper}>
