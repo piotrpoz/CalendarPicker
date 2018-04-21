@@ -198,7 +198,7 @@ class Days extends React.Component {
               date={date}
               maxDate={this.props.maxDate}
               minDate={this.props.minDate}
-              onDayChange={this.onPressDay}
+              onDayChange={this.onPressDay.bind(this)}
               screenWidth={this.props.screenWidth}
               selectedDayColor={this.props.selectedDayColor}
               selectedDayTextColor={this.props.selectedDayTextColor}
@@ -472,7 +472,7 @@ export default class CalendarPicker extends React.Component {
           year={this.state.year}
           month={this.state.month}
           day={this.state.day}
-          onMonthChange={this.onMonthChange}
+          onMonthChange={this.onMonthChange.bind(this)}
           getNextYear={this.getNextYear}
           getPrevYear={this.getPrevYear}
           months={this.props.months}
@@ -491,7 +491,7 @@ export default class CalendarPicker extends React.Component {
           month={this.state.month}
           year={this.state.year}
           date={this.state.date}
-          onDayChange={this.onDayChange}
+          onDayChange={this.onDayChange.bind(this)}
           screenWidth={this.props.screenWidth}
           startFromMonday={this.props.startFromMonday}
           selectedDayColor={this.props.selectedDayColor}
