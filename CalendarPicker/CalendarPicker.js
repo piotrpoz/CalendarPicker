@@ -25,15 +25,16 @@ var {
 
 import PropTypes from 'prop-types';
 
-var makeStyles = require('./makeStyles');
+const makeStyles = require('./makeStyles');
 
 //The styles in makeStyles are intially scaled to this width
 const IPHONE6_WIDTH = 375;
-var initialScale = Dimensions.get('window').width / IPHONE6_WIDTH ;
-var styles = StyleSheet.create(makeStyles(initialScale));
+const initialScale = Dimensions.get('window').width / IPHONE6_WIDTH ;
+let styles = StyleSheet.create(makeStyles(initialScale));
 
-var Day = React.createClass({
-  propTypes: {
+class Day extends React.Component {
+
+  propTypes = {
     date: PropTypes.instanceOf(Date),
     onDayChange: PropTypes.func,
     maxDate: PropTypes.instanceOf(Date),
@@ -49,19 +50,20 @@ var Day = React.createClass({
     selectedDayTextColor: PropTypes.string,
     textStyle: Text.propTypes.style,
     currentDay: PropTypes.bool
-  },
+  }
+
   getDefaultProps () {
     return {
       onDayChange () {}
     };
-  },
+  }
 
   getInitialState () {
     this.DAY_WIDTH = (this.props.screenWidth - 16)/7;
     this.SELECTED_DAY_WIDTH = (this.props.screenWidth - 16)/7 - 10;
     this.BORDER_RADIUS = this.SELECTED_DAY_WIDTH/2;
     return null;
-  },
+  }
 
   render() {
     var textStyle = this.props.textStyle;
@@ -110,10 +112,11 @@ var Day = React.createClass({
       }
     }
   }
-});
+};
 
-var Days = React.createClass({
-  propTypes: {
+class Days extends React.Component {
+
+  propTypes = {
     maxDate: PropTypes.instanceOf(Date),
     minDate: PropTypes.instanceOf(Date),
     date: PropTypes.instanceOf(Date).isRequired,
@@ -123,23 +126,24 @@ var Days = React.createClass({
     selectedDayColor: PropTypes.string,
     selectedDayTextColor: PropTypes.string,
     textStyle: Text.propTypes.style
-  },
+  }
+
   getInitialState() {
     return {
       selectedStates: []
     };
-  },
+  }
 
   componentDidMount() {
     this.updateSelectedStates(this.props.date.getDate());
-  },
+  }
 
   // Trigger date change if new props are provided.
   // Typically, when selectedDate is changed programmatically.
   //
-  componentWillReceiveProps: function(newProps) {
+  componentWillReceiveProps(newProps) {
     this.updateSelectedStates(newProps.date.getDate());
-  },
+  }
 
   updateSelectedStates(day) {
     var selectedStates = [],
@@ -158,12 +162,12 @@ var Days = React.createClass({
       selectedStates: selectedStates
     });
 
-  },
+  }
 
   onPressDay(day) {
     this.updateSelectedStates(day);
     this.props.onDayChange({day: day});
-  },
+  }
 
   // Not going to touch this one - I'd look at whether there is a more functional
   // way you can do this using something like `range`, `map`, `partition` and such
@@ -221,23 +225,26 @@ var Days = React.createClass({
     }
 
     return matrix;
-  },
+  }
 
   render() {
     return <View style={styles.daysWrapper}>{ this.getCalendarDays() }</View>;
   }
 
-});
+};
 
-var WeekDaysLabels = React.createClass({
-  propTypes: {
+class WeekDaysLabels extends React.Component {
+
+  propTypes = {
     screenWidth: PropTypes.number,
     textStyle: Text.propTypes.style
-  },
+  }
+
   getInitialState() {
     this.DAY_WIDTH = (this.props.screenWidth - 16)/7;
     return null;
-  },
+  }
+
   render() {
     return (
       <View style={styles.dayLabelsWrapper}>
@@ -245,10 +252,11 @@ var WeekDaysLabels = React.createClass({
       </View>
     );
   }
-});
+};
 
-var HeaderControls = React.createClass({
-  propTypes: {
+class HeaderControls extends React.Component{
+
+  propTypes = {
     month: PropTypes.number.isRequired,
     year: PropTypes.number,
     day: PropTypes.number,
@@ -256,21 +264,22 @@ var HeaderControls = React.createClass({
     getPrevYear: PropTypes.func.isRequired,
     onMonthChange: PropTypes.func.isRequired,
     textStyle: Text.propTypes.style
-  },
+  }
+
   getInitialState() {
     return {
       selectedMonth: this.props.month
     };
-  },
+  }
 
   // Trigger date change if new props are provided.
   // Typically, when selectedDate is changed programmatically.
   //
-  componentWillReceiveProps: function(newProps) {
+  componentWillReceiveProps(newProps) {
     this.setState({
       selectedMonth: newProps.month
     });
-  },
+  }
 
   // Logic seems a bit awkawardly split up between here and the CalendarPicker
   // component, eg: getNextYear is actually modifying the state of the parent,
@@ -293,7 +302,7 @@ var HeaderControls = React.createClass({
         }
       );
     }
-  },
+  }
 
   getPrevious() {
     var prev = this.state.selectedMonth - 1;
@@ -312,7 +321,7 @@ var HeaderControls = React.createClass({
         }
       );
     }
-  },
+  }
 
   previousMonthDisabled() {
     return ( this.props.minDate &&
@@ -320,7 +329,7 @@ var HeaderControls = React.createClass({
                ( this.props.year == this.props.minDate.getFullYear() && this.state.selectedMonth <= this.props.minDate.getMonth() )
              )
            );
-  },
+  }
 
   nextMonthDisabled() {
     return ( this.props.maxDate &&
@@ -328,7 +337,7 @@ var HeaderControls = React.createClass({
                ( this.props.year == this.props.maxDate.getFullYear() && this.state.selectedMonth >= this.props.maxDate.getMonth() )
              )
            );
-  },
+  }
 
   render() {
     var textStyle = this.props.textStyle;
@@ -378,10 +387,10 @@ var HeaderControls = React.createClass({
       </View>
     );
   }
-});
+};
 
-var CalendarPicker = React.createClass({
-  propTypes: {
+export default class CalendarPicker extends React.Component {
+  propTypes = {
     maxDate: PropTypes.instanceOf(Date),
     minDate: PropTypes.instanceOf(Date),
     selectedDate: PropTypes.instanceOf(Date).isRequired,
@@ -403,12 +412,14 @@ var CalendarPicker = React.createClass({
     scaleFactor: PropTypes.number,
     textStyle: Text.propTypes.style,
     makeStyle: PropTypes.func
-  },
+  }
+
   getDefaultProps() {
     return {
       onDateChange () {}
     };
-  },
+  }
+
   getInitialState() {
     if (this.props.scaleFactor !== undefined) {
       if (this.props.makeStyles != undefined) {
@@ -427,23 +438,23 @@ var CalendarPicker = React.createClass({
       year: this.props.selectedDate.getFullYear(),
       selectedDay: []
     };
-  },
+  }
 
   // Trigger date change if new props are provided.
   // Typically, when selectedDate is changed programmatically.
   //
-  componentWillReceiveProps: function(newProps) {
+  componentWillReceiveProps(newProps) {
     this.setState({
       date:  newProps.selectedDate,
       day:   newProps.selectedDate.getDate(),
       month: newProps.selectedDate.getMonth(),
       year:  newProps.selectedDate.getFullYear()
     });
-  },
+  }
 
   onDayChange(day) {
     this.setState({day: day.day}, () => { this.onDateChange(); });
-  },
+  }
 
   onMonthChange(month) {
 /*    let maxDayNewMonth = 30;
@@ -459,15 +470,15 @@ var CalendarPicker = React.createClass({
       day = maxDayNewMonth;
     }*/
     this.setState({month: month}, () => { this.onDateChange(); });
-  },
+  }
 
   getNextYear(){
     this.setState({year: this.state.year + 1}, () => { this.onDateChange(); });
-  },
+  }
 
   getPrevYear() {
     this.setState({year: this.state.year - 1}, () => { this.onDateChange(); });
-  },
+  }
 
   onDateChange() {
     var {
@@ -479,7 +490,7 @@ var CalendarPicker = React.createClass({
 
     this.setState({date: date});
     this.props.onDateChange(date);
-  },
+  }
 
   render() {
     return (
@@ -518,6 +529,4 @@ var CalendarPicker = React.createClass({
       </View>
     );
   }
-});
-
-module.exports = CalendarPicker;
+};
