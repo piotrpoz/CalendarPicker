@@ -23,6 +23,8 @@ var {
   getDaysInMonth
 } = require('./Util');
 
+import PropTypes from 'prop-types';
+
 var makeStyles = require('./makeStyles');
 
 //The styles in makeStyles are intially scaled to this width
@@ -32,21 +34,21 @@ var styles = StyleSheet.create(makeStyles(initialScale));
 
 var Day = React.createClass({
   propTypes: {
-    date: React.PropTypes.instanceOf(Date),
-    onDayChange: React.PropTypes.func,
-    maxDate: React.PropTypes.instanceOf(Date),
-    minDate: React.PropTypes.instanceOf(Date),
-    selected: React.PropTypes.bool,
-    day: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.string
+    date: PropTypes.instanceOf(Date),
+    onDayChange: PropTypes.func,
+    maxDate: PropTypes.instanceOf(Date),
+    minDate: PropTypes.instanceOf(Date),
+    selected: PropTypes.bool,
+    day: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string
     ]).isRequired,
-    screenWidth: React.PropTypes.number,
-    startFromMonday: React.PropTypes.bool,
-    selectedDayColor: React.PropTypes.string,
-    selectedDayTextColor: React.PropTypes.string,
+    screenWidth: PropTypes.number,
+    startFromMonday: PropTypes.bool,
+    selectedDayColor: PropTypes.string,
+    selectedDayTextColor: PropTypes.string,
     textStyle: Text.propTypes.style,
-    currentDay: React.PropTypes.bool
+    currentDay: PropTypes.bool
   },
   getDefaultProps () {
     return {
@@ -63,6 +65,7 @@ var Day = React.createClass({
 
   render() {
     var textStyle = this.props.textStyle;
+    let day = this.props.day.toString();
     if (this.props.selected) {
       var selectedDayColorStyle = this.props.selectedDayColor ? {backgroundColor: this.props.selectedDayColor} : {};
       var selectedDayTextColorStyle = this.props.selectedDayTextColor ? {color: this.props.selectedDayTextColor} : {};
@@ -73,7 +76,7 @@ var Day = React.createClass({
               style={styles.dayButton}
               onPress={() => this.props.onDayChange(this.props.day) }>
               <Text style={[styles.dayLabel, textStyle, selectedDayTextColorStyle]}>
-                {this.props.day}
+                {day}
               </Text>
             </TouchableOpacity>
           </View>
@@ -87,7 +90,7 @@ var Day = React.createClass({
         return (
           <View style={styles.dayWrapper}>
             <Text style={[styles.dayLabel, textStyle, styles.disabledTextColor, currentDayStyle]}>
-              {this.props.day}
+              {day}
             </Text>
           </View>
         );
@@ -99,7 +102,7 @@ var Day = React.createClass({
             style={styles.dayButton}
             onPress={() => this.props.onDayChange(this.props.day) }>
               <Text style={[styles.dayLabel, textStyle, currentDayStyle]}>
-                {this.props.day}
+                {day}
               </Text>
             </TouchableOpacity>
           </View>
@@ -111,14 +114,14 @@ var Day = React.createClass({
 
 var Days = React.createClass({
   propTypes: {
-    maxDate: React.PropTypes.instanceOf(Date),
-    minDate: React.PropTypes.instanceOf(Date),
-    date: React.PropTypes.instanceOf(Date).isRequired,
-    month: React.PropTypes.number.isRequired,
-    year: React.PropTypes.number.isRequired,
-    onDayChange: React.PropTypes.func.isRequired,
-    selectedDayColor: React.PropTypes.string,
-    selectedDayTextColor: React.PropTypes.string,
+    maxDate: PropTypes.instanceOf(Date),
+    minDate: PropTypes.instanceOf(Date),
+    date: PropTypes.instanceOf(Date).isRequired,
+    month: PropTypes.number.isRequired,
+    year: PropTypes.number.isRequired,
+    onDayChange: PropTypes.func.isRequired,
+    selectedDayColor: PropTypes.string,
+    selectedDayTextColor: PropTypes.string,
     textStyle: Text.propTypes.style
   },
   getInitialState() {
@@ -228,7 +231,7 @@ var Days = React.createClass({
 
 var WeekDaysLabels = React.createClass({
   propTypes: {
-    screenWidth: React.PropTypes.number,
+    screenWidth: PropTypes.number,
     textStyle: Text.propTypes.style
   },
   getInitialState() {
@@ -246,12 +249,12 @@ var WeekDaysLabels = React.createClass({
 
 var HeaderControls = React.createClass({
   propTypes: {
-    month: React.PropTypes.number.isRequired,
-    year: React.PropTypes.number,
-    day: React.PropTypes.number,
-    getNextYear: React.PropTypes.func.isRequired,
-    getPrevYear: React.PropTypes.func.isRequired,
-    onMonthChange: React.PropTypes.func.isRequired,
+    month: PropTypes.number.isRequired,
+    year: PropTypes.number,
+    day: PropTypes.number,
+    getNextYear: PropTypes.func.isRequired,
+    getPrevYear: PropTypes.func.isRequired,
+    onMonthChange: PropTypes.func.isRequired,
     textStyle: Text.propTypes.style
   },
   getInitialState() {
@@ -379,27 +382,27 @@ var HeaderControls = React.createClass({
 
 var CalendarPicker = React.createClass({
   propTypes: {
-    maxDate: React.PropTypes.instanceOf(Date),
-    minDate: React.PropTypes.instanceOf(Date),
-    selectedDate: React.PropTypes.instanceOf(Date).isRequired,
-    onDateChange: React.PropTypes.func,
-    screenWidth: React.PropTypes.number,
-    startFromMonday: React.PropTypes.bool,
-    weekdays: React.PropTypes.array,
-    months: React.PropTypes.array,
-    previousTitle: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.string
+    maxDate: PropTypes.instanceOf(Date),
+    minDate: PropTypes.instanceOf(Date),
+    selectedDate: PropTypes.instanceOf(Date).isRequired,
+    onDateChange: PropTypes.func,
+    screenWidth: PropTypes.number,
+    startFromMonday: PropTypes.bool,
+    weekdays: PropTypes.array,
+    months: PropTypes.array,
+    previousTitle: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.string
     ]),
-    nextTitle: React.PropTypes.oneOfType([
-      React.PropTypes.object,
-      React.PropTypes.string
+    nextTitle: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.string
     ]),
-    selectedDayColor: React.PropTypes.string,
-    selectedDayTextColor: React.PropTypes.string,
-    scaleFactor: React.PropTypes.number,
+    selectedDayColor: PropTypes.string,
+    selectedDayTextColor: PropTypes.string,
+    scaleFactor: PropTypes.number,
     textStyle: Text.propTypes.style,
-    makeStyle: React.PropTypes.func
+    makeStyle: PropTypes.func
   },
   getDefaultProps() {
     return {
@@ -443,6 +446,18 @@ var CalendarPicker = React.createClass({
   },
 
   onMonthChange(month) {
+/*    let maxDayNewMonth = 30;
+    let day = this.state.day;
+
+    if ([0, 4, 6, 7, 9, 11].indexOf(month)) {
+      maxDayNewMonth = 31;
+    }
+    else if (month == 1) {
+      maxDayNewMonth = this.stateYear % 4 ? 29 : 28;
+    }
+    if (this.state.day > maxDayNewMonth) {
+      day = maxDayNewMonth;
+    }*/
     this.setState({month: month}, () => { this.onDateChange(); });
   },
 
