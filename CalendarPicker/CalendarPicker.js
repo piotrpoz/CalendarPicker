@@ -260,6 +260,7 @@ class HeaderControls extends React.Component{
   constructor(props) {
 
     super(props);
+
     this.state = {
       selectedMonth: this.props.month
     };
@@ -334,7 +335,7 @@ class HeaderControls extends React.Component{
     }
     else {
       previous = (
-        <TouchableOpacity onPress={this.getPrevious}>
+        <TouchableOpacity onPress={this.getPrevious.bind(this)}>
           <Text style={[styles.prev, textStyle]}>{this.props.previousTitle || 'Previous'}</Text>
         </TouchableOpacity>
       );
@@ -348,7 +349,7 @@ class HeaderControls extends React.Component{
     }
     else {
       next = (
-        <TouchableOpacity onPress={this.getNext}>
+        <TouchableOpacity onPress={this.getNext.bind(this)}>
           <Text style={[styles.next, textStyle]}>{this.props.nextTitle || 'Next'}</Text>
         </TouchableOpacity>
       );
