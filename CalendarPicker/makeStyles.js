@@ -15,7 +15,9 @@ function makeStyles(scaler) {
     dayWrapper: {
       width: 50*scaler,
       height: 40*scaler,
-      backgroundColor: 'rgba(0,0,0,0.0)'
+      backgroundColor: 'rgba(0,0,0,0.0)',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
 
     dayButton: {
@@ -118,6 +120,15 @@ function makeStyles(scaler) {
 
     disabledTextColor: {
       color: '#BBBBBB'
+    },
+
+    dayHighlight: {
+      width: 4,
+      height: 4,
+      borderRadius: 2,
+      flex: 1,
+      backgroundColor: Style.colors.primary.normal,
+      margin: 5
     }
   };
 }

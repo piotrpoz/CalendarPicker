@@ -49,7 +49,8 @@ class Day extends React.Component {
     selectedDayColor: PropTypes.string,
     selectedDayTextColor: PropTypes.string,
     textStyle: Text.propTypes.style,
-    currentDay: PropTypes.bool
+    currentDay: PropTypes.bool,
+    isHighlighted: PropTypes.bool
   }
 
   constructor(props) {
@@ -64,8 +65,17 @@ class Day extends React.Component {
 
   render() {
     var textStyle = this.props.textStyle;
-    let day = this.props.day.toString();
+    let day = this.props.day.toString();// + 'a';
+
+    const hihglight = this.props.isHighlighted
+      ? <View style={[
+        styles.dayHighlight,
+        //this.props.dayHighlightStyle ? this.props.dayHighlightStyle : null
+      ]}></View>
+      : null;
+
     if (this.props.selected) {
+
       var selectedDayColorStyle = this.props.selectedDayColor ? {backgroundColor: this.props.selectedDayColor} : {};
       var selectedDayTextColorStyle = this.props.selectedDayTextColor ? {color: this.props.selectedDayTextColor} : {};
       return (
@@ -77,8 +87,10 @@ class Day extends React.Component {
               <Text style={[styles.dayLabel, textStyle, selectedDayTextColorStyle]}>
                 {day}
               </Text>
+
             </TouchableOpacity>
           </View>
+          {hihglight}
         </View>
       );
     } else {
@@ -91,6 +103,7 @@ class Day extends React.Component {
             <Text style={[styles.dayLabel, textStyle, styles.disabledTextColor, currentDayStyle]}>
               {day}
             </Text>
+            {hihglight}
           </View>
         );
       }
@@ -104,6 +117,7 @@ class Day extends React.Component {
                 {day}
               </Text>
             </TouchableOpacity>
+            {hihglight}
           </View>
         );
       }
@@ -122,12 +136,15 @@ class Days extends React.Component {
     onDayChange: PropTypes.func.isRequired,
     selectedDayColor: PropTypes.string,
     selectedDayTextColor: PropTypes.string,
-    textStyle: Text.propTypes.style
+    textStyle: Text.propTypes.style,
+    highlightedDays: PropTypes.array
   }
 
   constructor(props) {
 
+
     super(props);
+
     this.state = {
       selectedStates: []
     };
@@ -182,6 +199,7 @@ class Days extends React.Component {
     var currentDate = new Date();
     currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
 
+
     for (i = 0; i < MAX_ROWS; i++ ) { // Week rows
       columns = [];
 
@@ -190,6 +208,11 @@ class Days extends React.Component {
           if (currentDay < getDaysInMonth(month, year)) {
 
             let date = new Date(year, month, currentDay + 1);
+
+
+            const isHighlighted = this.props.highlightedDays
+              ? this.props.highlightedDays.indexOf(date.getDate()) >= 0
+              : false;
 
             columns.push(<Day
               key={'cpr-' + j}
@@ -203,7 +226,10 @@ class Days extends React.Component {
               selectedDayColor={this.props.selectedDayColor}
               selectedDayTextColor={this.props.selectedDayTextColor}
               textStyle={this.props.textStyle}
-              currentDay={date.getTime() == currentDate.getTime()}/>);
+              currentDay={date.getTime() == currentDate.getTime()}
+              isHighlighted={isHighlighted}
+            />);
+
             currentDay++;
           }
         } else {
@@ -397,7 +423,8 @@ export default class CalendarPicker extends React.Component {
     selectedDayTextColor: PropTypes.string,
     scaleFactor: PropTypes.number,
     textStyle: Text.propTypes.style,
-    makeStyle: PropTypes.func
+    makeStyle: PropTypes.func,
+    highlightedDays: PropTypes.array
   }
 
 
@@ -465,6 +492,7 @@ export default class CalendarPicker extends React.Component {
   }
 
   render() {
+
     return (
       <View style={styles.calendar}>
         <HeaderControls
@@ -497,7 +525,10 @@ export default class CalendarPicker extends React.Component {
           startFromMonday={this.props.startFromMonday}
           selectedDayColor={this.props.selectedDayColor}
           selectedDayTextColor={this.props.selectedDayTextColor}
-          textStyle={this.props.textStyle} />
+          textStyle={this.props.textStyle}
+          highlightedDays={this.props.highlightedDays ? this.props.highlightedDays : []}
+        />
+
       </View>
     );
   }
