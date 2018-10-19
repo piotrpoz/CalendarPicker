@@ -127,7 +127,7 @@ function makeStyles(scaler) {
       height: 4,
       borderRadius: 2,
       flex: 1,
-      backgroundColor: Style.colors.primary.normal,
+      backgroundColor: '#e7b429',
       margin: 5
     }
   };
