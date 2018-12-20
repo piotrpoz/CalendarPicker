@@ -502,8 +502,8 @@ export default class CalendarPicker extends React.Component {
           month={this.state.month}
           day={this.state.day}
           onMonthChange={this.onMonthChange.bind(this)}
-          getNextYear={this.getNextYear}
-          getPrevYear={this.getPrevYear}
+          getNextYear={this.getNextYear.bind(this)}
+          getPrevYear={this.getPrevYear.bind(this)}
           months={this.props.months}
           previousTitle={this.props.previousTitle}
           nextTitle={this.props.nextTitle}
